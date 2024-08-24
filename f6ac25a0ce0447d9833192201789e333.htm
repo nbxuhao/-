@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小礼物</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
+        
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', serif; /* 更好看的字体 */
+        }
+        
+        .text {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: red; /* 文本颜色变为红色 */
+        }
+        
+        .timer {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: red; /* 倒计时颜色变为红色 */
+        }
+        
+        .petal {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="pink"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center/contain;
+            animation: fall 5s linear forwards, fadeOut 5s forwards;
+            transform: rotate(-20deg);
+            opacity: 0.8;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        @keyframes fadeOut {
+            0% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="text">我们已经在一起</div> <!-- 新增的文本 -->
+    <div class="timer" id="timer">Loading...</div>
+    <div id="petals-container"></div>
+
+    <script>
+        // 设置开始时间
+        const startTime = new Date("2021-11-16T07:45:00").getTime();
+        
+        function updateTimer() {
+            const now = new Date().getTime();
+            const elapsed = now - startTime;
+        
+            const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((elapsed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+        
+            document.getElementById("timer").innerHTML = 
+                `${days} 天 ${hours} 小时 ${minutes} 分钟 ${seconds} 秒`;
+        }
+        
+        setInterval(updateTimer, 1000);  // 每秒更新一次计时器
+        
+        // 生成并删除樱花花瓣
+        function createPetal() {
+            const container = document.getElementById('petals-container');
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.style.top = '-10vh';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+            container.appendChild(petal);
+        
+            setTimeout(() => {
+                petal.remove();
+            }, 5000);  // 5秒后删除花瓣
+        }
+        
+        setInterval(createPetal, 500);  // 每0.5秒生成一个花瓣
+    </script>
+</body>
+
+</html>
